@@ -152,6 +152,23 @@ def run_single_sequence():
     report_data["description"] = video_data.get('description', 'N/A')
     write_report(report_data)
     
+    # Send final summary to Discord
+    summary_data = {
+        "video_name": title,  # Original Twitter tweet text/name
+        "fb_url": video_data.get('fb_url', 'N/A'),
+        "yt_url": video_data.get('yt_url', 'N/A'),
+        "tiktok_url": video_data.get('tiktok_url', 'N/A'),
+        "fb_err": video_data.get('fb_err', 'N/A'),
+        "yt_err": video_data.get('yt_err', 'N/A'),
+        "tiktok_err": video_data.get('tiktok_err', 'N/A'),
+        "title": video_data.get('title', 'N/A'),  # SEO Title
+        "description": video_data.get('description', 'N/A'),
+        "original_file": f"Twitter Link: {source_url}"  # Original Twitter Post URL
+    }
+    
+    from src.common.discord import report_final_summary
+    report_final_summary(summary_data, stats)
+    
     print("Pipeline run completed.")
     return True
 

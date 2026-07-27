@@ -1,116 +1,101 @@
 import os
-import random
 import textwrap
 from PIL import Image, ImageDraw, ImageFont
 from pilmoji import Pilmoji
 
 def generate_ui_frame(output_path: str, source_name: str, headline: str, story: str, width=1080, height=1920):
-    img = Image.new('RGBA', (width, height), (0, 0, 0, 0))
+    # Create a transparent video container area by compositing
+    bg_img = Image.new('RGBA', (width, height), (255, 255, 255, 255))
+    mask = Image.new('L', (width, height), 0)
+    mask_draw = ImageDraw.Draw(mask)
+    mask_draw.rounded_rectangle([5, 230, width-5, height - 10], radius=25, fill=255)
+    
+    transparent_img = Image.new('RGBA', (width, height), (0, 0, 0, 0))
+    img = Image.composite(transparent_img, bg_img, mask)
+    
     draw = ImageDraw.Draw(img)
     
-    # Colors
-    fb_blue = (59, 89, 152, 255)
-    white = (255, 255, 255, 255)
-    yellow = (255, 215, 0, 255)
-    line_color = (255, 255, 255, 60)
+    # Draw inner rounded rectangle border around the video area (Dark Navy Blue)
+    video_border_color = (10, 37, 64, 255)
+    draw.rounded_rectangle([5, 230, width-5, height - 10], radius=25, outline=video_border_color, width=8)
     
-    # 1. Outer yellow border (5px)
-    draw.rectangle([0, 0, width, height], outline=yellow, width=5)
-    
-    # 2. Draw Top Banner (Using extracted exact asset)
-    top_banner_path = os.path.join(os.path.dirname(__file__), "../../assets/top_banner_extracted.png")
-    top_bar_height = 90
-    if os.path.exists(top_banner_path):
-        top_banner_img = Image.open(top_banner_path).convert("RGBA")
-        top_banner_resized = top_banner_img.resize((width - 10, top_bar_height), Image.LANCZOS)
-        img.paste(top_banner_resized, (5, 5), top_banner_resized)
+    # Fonts (Platform-specific fallbacks)
+    import platform
+    if platform.system() == "Windows":
+        font_bold = 'C:\\Windows\\Fonts\\arialbd.ttf'
+        font_reg = 'C:\\Windows\\Fonts\\arial.ttf'
     else:
-        draw.rectangle([5, 5, width-5, top_bar_height+5], fill=fb_blue)
-        
-    # 3. Draw Bottom Banner
-    bottom_bar_height = 340
-    draw.rectangle([5, height - bottom_bar_height - 5, width - 5, height - 5], fill=fb_blue)
-    
-    # Fonts
-    font_bold = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
-    font_reg = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
-    
+        font_bold = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
+        font_reg = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
+
+    # --- Draw Page Logo and Name at Top Left ---
+    logo_path = os.path.join(os.path.dirname(__file__), "../../assets/custom_logo.png")
+    if os.path.exists(logo_path):
+        try:
+            mask_logo = Image.new('L', (120, 120), 0)
+            mask_logo_draw = ImageDraw.Draw(mask_logo)
+            mask_logo_draw.ellipse((0, 0, 120, 120), fill=255)
+            
+            logo_img = Image.open(logo_path).convert("RGBA")
+            logo_resized = logo_img.resize((120, 120), Image.LANCZOS)
+            img.paste(logo_resized, (30, 25), mask_logo)
+        except Exception as e:
+            print(f"Error drawing circular logo: {e}")
+            
     try:
-        f_head = ImageFont.truetype(font_bold, 40)
-        f_story = ImageFont.truetype(font_reg, 32)
-        f_stats = ImageFont.truetype(font_bold, 35)
+        f_name = ImageFont.truetype(font_bold, 38)
+        f_handle = ImageFont.truetype(font_reg, 30)
     except IOError:
-        f_head = f_story = f_stats = ImageFont.load_default()
+        f_name = f_handle = ImageFont.load_default()
+
+    # Draw Page Name
+    draw.text((170, 35), "Financial Edge Daily", fill=(0, 0, 0, 255), font=f_name)
+    
+    # Draw Verified Badge
+    try:
+        name_w = int(draw.textlength("Financial Edge Daily", font=f_name))
+    except AttributeError:
+        bbox = draw.textbbox((0, 0), "Financial Edge Daily", font=f_name)
+        name_w = bbox[2] - bbox[0]
+        
+    badge_x = 170 + name_w + 12
+    badge_y = 42
+    draw.ellipse([badge_x, badge_y, badge_x + 28, badge_y + 28], fill=(0, 149, 246, 255))
+    draw.line([badge_x + 9, badge_y + 14, badge_x + 13, badge_y + 18], fill=(255, 255, 255, 255), width=3)
+    draw.line([badge_x + 13, badge_y + 18, badge_x + 20, badge_y + 9], fill=(255, 255, 255, 255), width=3)
+
+    # Draw Handle
+    draw.text((170, 85), "@FinancialEdgeDaily", fill=(100, 110, 120, 255), font=f_handle)
         
     def draw_all(renderer, is_pilmoji):
-        start_y = height - bottom_bar_height + 25
-        
-        # --- Main Headline ---
+        # --- Wrapped Details/Description (Drawn inside the Top Area, just above the video) ---
         try:
-            f_sub = ImageFont.truetype(font_bold, 38)
-        except IOError:
-            f_sub = ImageFont.load_default()
-            
-        headline_text = headline.strip() if headline else ""
-        renderer.text((30, start_y), headline_text, fill=white, font=f_sub)
-        
-        start_y += 60
-        
-        # --- Description and Hashtags ---
-        story_text = story if story else "The national team arrives to a massive crowd ahead of their crucial match! Can they go all the way?"
-        
-        # Extract hashtags and clean story text
-        words = story_text.split()
-        hashtags = [w for w in words if w.startswith('#')]
-        clean_story = " ".join([w for w in words if not w.startswith('#')])
-        
-        story_lines = textwrap.wrap(clean_story, width=72)
-        
-        try:
-            f_story = ImageFont.truetype(font_reg, 30)
-            f_story_bold = ImageFont.truetype(font_bold, 30)
+            f_story = ImageFont.truetype(font_reg, 28)
         except IOError:
             f_story = ImageFont.load_default()
-            f_story_bold = ImageFont.load_default()
             
-        for line in story_lines[:3]: # Max 3 lines for description
-            renderer.text((30, start_y), line, fill=white, font=f_story)
-            start_y += 42
+        text_to_draw = story.strip() if story else (headline.strip() if headline else "")
+        # Limit text length to avoid drawing into the video area
+        if len(text_to_draw) > 90:
+            text_to_draw = text_to_draw[:87] + "..."
             
-        # Draw hashtags on a new line with lighter color
-        if hashtags:
-            hashtag_text = " ".join(hashtags)
-            renderer.text((30, start_y), hashtag_text, fill=(160, 176, 192, 255), font=f_story)
-            start_y += 45
-            
-        # (Removed separator, hint text, and engagement bar)
+        # Wrap to max 48 characters per line
+        wrapped_lines = textwrap.wrap(text_to_draw, width=48)
+        wrapped_lines = wrapped_lines[:2]  # Limit to 2 lines
         
-        # --- VIDEO CREDIT OVERLAY ---
-        # Draw on the transparent area so it overlays on the video
-        credit_text = "Video Credit: USA Military & Army"
-        try:
-            f_credit = ImageFont.truetype(font_bold, 35)
-        except IOError:
-            f_credit = ImageFont.load_default()
-            
-        if is_pilmoji:
-            credit_w = renderer.getsize(credit_text, font=f_credit)[0]
-        else:
-            try:
-                credit_w = int(draw.textlength(credit_text, font=f_credit))
-            except AttributeError:
-                bbox = draw.textbbox((0, 0), credit_text, font=f_credit)
-                credit_w = bbox[2] - bbox[0]
-                
-        # Position at bottom right of the video area
-        credit_x = width - credit_w - 30
-        credit_y = height - bottom_bar_height - 50
-        
-        # Draw stroke/shadow for visibility
-        shadow_color = (0, 0, 0, 200)
-        for offset in [(2,2), (-2,-2), (2,-2), (-2,2), (0,2), (2,0), (-2,0), (0,-2)]:
-            renderer.text((credit_x + offset[0], credit_y + offset[1]), credit_text, fill=shadow_color, font=f_credit)
-        renderer.text((credit_x, credit_y), credit_text, fill=(230, 230, 230, 255), font=f_credit)
+        y_offset = 140
+        for line in wrapped_lines:
+            if is_pilmoji:
+                line_w = renderer.getsize(line, font=f_story)[0]
+            else:
+                try:
+                    line_w = int(draw.textlength(line, font=f_story))
+                except AttributeError:
+                    bbox = draw.textbbox((0, 0), line, font=f_story)
+                    line_w = bbox[2] - bbox[0]
+            line_x = (width - line_w) // 2
+            renderer.text((line_x, y_offset), line, fill=(0, 0, 0, 255), font=f_story)
+            y_offset += 36
 
     try:
         with Pilmoji(img) as pilmoji:
@@ -124,9 +109,4 @@ def generate_ui_frame(output_path: str, source_name: str, headline: str, story: 
     return output_path
 
 if __name__ == "__main__":
-    generate_ui_frame(
-        "temp/test_ui_frame.png", 
-        "MILITARY NEWS & TRIBUTE", 
-        "MILITARY STRENGTH & PRECISION! 🇺🇸", 
-        "A closer look at military drills and tactical training showing the dedication of our troops! #Military #USArmy #USNavy"
-    )
+    pass

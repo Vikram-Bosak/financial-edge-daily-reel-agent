@@ -74,7 +74,7 @@ def main():
     tiktok_status = "Success" if "tiktok.com" in tiktok_url else "Failed / N/A"
     
     # GitHub Action Variables
-    repo = os.environ.get('GITHUB_REPOSITORY', 'Vikram-Bosak/American-Valor')
+    repo = os.environ.get('GITHUB_REPOSITORY', 'Vikram-Bosak/financial-edge-daily-reel-agent')
     run_id = os.environ.get('GITHUB_RUN_ID', 'UNKNOWN')
     repo_url = f"https://github.com/{repo}"
     run_url = f"{repo_url}/actions/runs/{run_id}"

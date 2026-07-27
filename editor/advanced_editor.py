@@ -34,11 +34,11 @@ def edit_3_4_custom_layout_template(input_path: str, logo_path: str, output_path
     # Check if horizontal flip is needed to avoid visual copyright checks
     flip_filter = "hflip," if "flip_horizontal" in safety_actions else ""
     
-    # 1080x1920 Canvas (9:16). Video takes 1070x1480 at x=5, y=95.
+    # 1080x1920 Canvas (9:16). Video takes 1070x1680 at x=5, y=230.
     # We apply the original zoom, speed, and color grading effects.
     filter_complex = (
-        f"[0:v]{flip_filter}setpts=PTS/1.05,scale=1070:1480:force_original_aspect_ratio=increase,crop=1070:1480,eq=contrast=1.05:brightness=0.02:saturation=1.15:gamma=1.0,unsharp=5:5:0.5[vid_processed];"
-        "[vid_processed]pad=1080:1920:5:95:color=black[bg];"
+        f"[0:v]{flip_filter}setpts=PTS/1.05,scale=1070:1680:force_original_aspect_ratio=increase,crop=1070:1680,eq=contrast=1.05:brightness=0.02:saturation=1.15:gamma=1.0,unsharp=5:5:0.5[vid_processed];"
+        "[vid_processed]pad=1080:1920:5:230:color=white[bg];"
         "[bg][1:v]overlay=0:0[outv]"
     )
     

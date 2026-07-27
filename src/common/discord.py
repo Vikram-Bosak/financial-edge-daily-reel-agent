@@ -134,7 +134,7 @@ def report_final_summary(summary_data: dict, stats: dict = None):
     error_text = "\n".join([f"❌ {e}" for e in errors]) if errors else "None"
     
     run_id = os.environ.get("GITHUB_RUN_ID", "")
-    repo_name = os.environ.get("GITHUB_REPOSITORY", "Vikram-Bosak/usa_military_army_agent_1")
+    repo_name = os.environ.get("GITHUB_REPOSITORY", "Vikram-Bosak/American-Valor")
     workflow_url = f"https://github.com/{repo_name}/actions/runs/{run_id}" if run_id else f"https://github.com/{repo_name}/actions"
     
     if not summary_data:
@@ -164,25 +164,24 @@ def report_final_summary(summary_data: dict, stats: dict = None):
     yt_status = "Success" if yt_url not in ["Failed", "N/A", "None", None] else f"Failed ({yt_err})"
     tiktok_status = "Success" if tiktok_url not in ["Failed", "N/A", "None", None] else f"Failed ({tiktok_err})"
     
-    title = str(summary_data.get('title', 'Automated USA Military Reel'))
+    title = str(summary_data.get('title', 'N/A'))
+    video_name = str(summary_data.get('video_name', 'N/A'))
+    description = str(summary_data.get('description', 'N/A'))
+    original_file = str(summary_data.get('original_file', 'raw_video.mp4'))
     
     msg = (
-        f"✅ **Upload Successfully Completed**\n\n"
-        f"📊 **Session Statistics:**\n"
-        f"🔍 Profiles Scanned: {profiles_scanned}\n"
-        f"🆕 New Videos (2h): {new_videos}\n"
-        f"⏭️ Videos Skipped: {skipped}\n"
-        f"📥 Downloaded: {downloaded}\n"
-        f"✏️ Edited: {edited}\n"
-        f"🚀 Uploaded: {uploaded}\n\n"
-        f"⚠️ **Errors:**\n{error_text}\n\n"
-        f"📤 **Facebook Status:** {fb_status}\n"
-        f"📤 **YouTube Status:** {yt_status}\n"
-        f"📤 **TikTok Status:** {tiktok_status}\n\n"
+        f"✅ **Pipeline Run Completed**\n\n"
+        f"🎬 **Video Name:**\n{video_name}\n\n"
+        f"📤 **Facebook Upload Status:** {fb_status}\n"
+        f"📤 **YouTube Upload Status:** {yt_status}\n"
+        f"📤 **TikTok Upload Status:** {tiktok_status}\n\n"
         f"🏷️ **SEO Title:**\n{title}\n\n"
+        f"📝 **Description:**\n{description}\n\n"
+        f"Original File: {original_file}\n\n"
         f"🔗 **Facebook Reel URL:**\n{fb_url}\n\n"
         f"▶️ **YouTube Video URL:**\n{yt_url}\n\n"
         f"🎵 **TikTok Video URL:**\n{tiktok_url}\n\n"
+        f"📦 **GitHub Repository:**\nhttps://github.com/{repo_name}\n\n"
         f"📄 **Workflow Run:**\n{workflow_url}"
     )
     send_discord_message(msg)
