@@ -1,4 +1,4 @@
-name: USA Military & Army Video Pipeline
+name: Finance News Video Pipeline
 
 on:
   push:

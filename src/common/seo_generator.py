@@ -15,44 +15,44 @@ except ImportError:
 load_dotenv()
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Trending Football/Soccer Keywords for SEO
+# Trending Finance/Stock Market Keywords for SEO
 # ──────────────────────────────────────────────────────────────────────────────
-FOOTBALL_KEYWORDS = {
-    "branches": [
-        "US Army", "US Navy", "US Marine Corps", "USMC", "US Air Force", "US Coast Guard",
-        "Space Force", "National Guard", "Special Forces", "Navy SEALs", "Green Berets", "Army Rangers",
+FINANCE_KEYWORDS = {
+    "sectors": [
+        "Stock Market", "Wall Street", "S&P 500", "Nasdaq", "Dow Jones",
+        "Crypto", "Bitcoin", "Ethereum", "Forex", "Commodities", "Gold", "Oil",
     ],
-    "equipment": [
-        "F-35 Lightning", "M1 Abrams Tank", "A-10 Warthog", "Aircraft Carrier", "F-22 Raptor",
-        "Apache Helicopter", "Black Hawk", "Destroyer", "Submarine", "Humvee", "CH-47 Chinook",
+    "companies": [
+        "Apple", "Tesla", "NVIDIA", "Amazon", "Microsoft", "Google", "Meta",
+        "Goldman Sachs", "JPMorgan", "Berkshire Hathaway", "BlackRock", "Visa",
     ],
     "topics": [
-        "military training", "tactical operations", "military drill", "basic training",
-        "air show", "naval exercises", "combat simulation", "paratrooper jump",
-        "weapons training", "military technology", "soldier tribute", "honor guard",
+        "stock market", "trading", "investing", "earnings report", "IPO",
+        "market analysis", "bull market", "bear market", "market crash",
+        "financial news", "economy", "inflation", "interest rates",
     ],
-    "military_terms": [
-        "military power", "operational readiness", "active duty", "special ops",
-        "tactical maneuver", "precision strike", "military exercise", "force protection",
-        "joint operations", "elite forces", "rapid deployment", "combat readiness",
+    "finance_terms": [
+        "market cap", "P/E ratio", "dividend", "portfolio", "hedge fund",
+        "venture capital", "private equity", "market rally", "price target",
+        "earnings call", "revenue growth", "profit margin",
     ],
     "emotional_hooks": [
-        "incredible strength", "elite precision", "pure dedication", "inspiring tribute",
-        "unmatched power", "military pride", "service and sacrifice", "jaw-dropping power",
-        "patriotism", "heroic moments", "must watch military",
+        "market surge", "massive gains", "smart money moves", "breaking financial news",
+        "what Wall Street won't tell you", "market prediction", "investing secrets",
+        "wall street insider", "financial freedom", "must watch market update",
     ],
 }
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Trending Military Hashtags
+# Trending Finance Hashtags
 # ──────────────────────────────────────────────────────────────────────────────
-FOOTBALL_HASHTAGS = [
-    "#USArmy", "#USNavy", "#USMC", "#USAirForce", "#Military", "#Army",
-    "#Marines", "#NavySEALs", "#SpecialForces", "#Tactical", "#Aviation",
-    "#FighterJet", "#Navy", "#AirForce", "#Veterans", "#MilitaryLife",
-    "#USArmyReserve", "#NationalGuard", "#Patriot", "#USA", "#Soldiers",
-    "#MilitaryPower", "#EliteForces", "#CoastGuard", "#SpaceForce",
-    "#Tank", "#Helicopter", "#F35", "#Warthog", "#Raptor",
+FINANCE_HASHTAGS = [
+    "#StockMarket", "#WallStreet", "#Investing", "#Trading", "#Finance",
+    "#Crypto", "#Bitcoin", "#Nasdaq", "#SP500", "#DowJones",
+    "#Economy", "#Stocks", "#Business", "#Money", "#Wealth",
+    "#MarketNews", "#FinancialNews", "#Earnings", "#BullMarket", "#Tesla",
+    "#NVIDIA", "#Apple", "#Amazon", "#Google", "#Forex",
+    "#Commodities", "#Gold", "#IPO", "#ETF", "#Portfolio",
 ]
 
 
@@ -115,18 +115,18 @@ def analyze_video_for_editing(context: dict) -> dict:
     client = _get_client()
     original_title = context.get('title', '')
     fallback = {
-        "category": "Highlight",
+        "category": "Market News",
         "short_headline": (
             original_title[:35] + "..."
             if len(original_title) > 35
-            else (original_title if original_title else "ELITE MILITARY MOMENT 🇺🇸🦅")
+            else (original_title if original_title else "BREAKING MARKET NEWS 📈")
         ),
         "story": (
             original_title
             if original_title
-            else "An incredible look at the dedication, power, and precision of our armed forces. Watch till the end to see the full strength in action! 🇺🇸"
+            else "Breaking financial news you need to see. Watch till the end for the full story! 📈"
         ),
-        "overlay_text": "🇺🇸 MUST-SEE MILITARY MOMENT",
+        "overlay_text": "📈 BREAKING MARKET NEWS",
         "safety_flags": [],
         "safety_actions": []
     }
@@ -146,13 +146,13 @@ def analyze_video_for_editing(context: dict) -> dict:
     # Build context snippet for trending keywords injection
     trending_snippet = (
         f"\nTrending keyword pools to weave in naturally: "
-        f"Branches: {', '.join(FOOTBALL_KEYWORDS['branches'][:6])}; "
-        f"Equipment: {', '.join(FOOTBALL_KEYWORDS['equipment'][:6])}; "
-        f"Terms: {', '.join(FOOTBALL_KEYWORDS['military_terms'][:6])}; "
-        f"Hooks: {', '.join(FOOTBALL_KEYWORDS['emotional_hooks'][:5])}."
+        f"Sectors: {', '.join(FINANCE_KEYWORDS['sectors'][:6])}; "
+        f"Companies: {', '.join(FINANCE_KEYWORDS['companies'][:6])}; "
+        f"Terms: {', '.join(FINANCE_KEYWORDS['finance_terms'][:6])}; "
+        f"Hooks: {', '.join(FINANCE_KEYWORDS['emotional_hooks'][:5])}."
     )
 
-    prompt = f"""You are a world-class USA Military and Army social media strategist and content safety auditor.
+    prompt = f"""You are a world-class Finance and Stock Market social media strategist and content safety auditor.
 Analyze the video context and metadata carefully to ensure absolute compliance with Facebook's Community Standards and Copyright/Rights Manager policies.
 
 === SOURCE OF TRUTH ===
@@ -163,18 +163,18 @@ Source Profile: {context.get('source', 'Unknown')}
 
 === YOUR TASK ===
 Analyze the "Original Title/Text" and any visual context. Identify:
-1. Exact branches of military, equipment type, or operation/tribute.
-2. The emotional hook (e.g., patriotism, power, precision, dedication).
+1. The financial topic (stocks, crypto, economy, earnings, market analysis, etc.).
+2. The emotional hook (e.g., breaking news, market surge, investment insight).
 3. The content safety risks:
-   - Does this show graphic real-world violence, injuries, or non-sanctioned active warfare casualties?
-   - Is it a non-military meme containing sensitive geopolitical issues?
-   - Does it use copy-protected audio or official network broadcaster footage that might trigger Rights Manager?
+   - Does this show graphic content or sensitive political issues?
+   - Is it a meme containing non-finance sensitive topics?
+   - Does it use copy-protected audio or official broadcaster footage?
 
 Then generate:
 1. **short_headline** – 3-6 words max, ALL CAPS, punchy, in ENGLISH. Include 1 relevant emoji.
 2. **story** – A 2-3 sentence conversational paragraph hyping the video.
-3. **category** – "Training", "Operations", "Tribute", "Aviation", "Navy", "Vehicles/Tech", "Meme/Humor", "Documentary".
-4. **safety_flags** – List containing flags if present: "violence" (casualties/blood/severe injuries), "sensitive_meme" (non-military topics), "copyright_audio" (heavy commentary), "broadcaster_watermark" (visible tv logos). Empty list if clean.
+3. **category** – "Market News", "Earnings", "Crypto", "Economy", "Trading", "Analysis", "Breaking News", "Documentary".
+4. **safety_flags** – List containing flags if present: "violence" (graphic content), "sensitive_meme" (non-finance topics), "copyright_audio" (heavy commentary), "broadcaster_watermark" (visible tv logos). Empty list if clean.
 5. **safety_actions** – Actions required to make the video safe: "mute_audio" (if audio risk), "flip_horizontal" (to avoid visual match), "trim_video" (if too long or ends in unsafe content). Empty list if clean.
 
 Return ONLY a valid JSON object with these exact keys:
@@ -248,22 +248,22 @@ def generate_upload_metadata(context: dict) -> dict:
 
     # Build a compact keyword reference for the prompt
     sample_keywords = ', '.join(
-        FOOTBALL_KEYWORDS['branches'][:4]
-        + FOOTBALL_KEYWORDS['equipment'][:4]
-        + FOOTBALL_KEYWORDS['topics'][:3]
+        FINANCE_KEYWORDS['sectors'][:4]
+        + FINANCE_KEYWORDS['companies'][:4]
+        + FINANCE_KEYWORDS['topics'][:3]
     )
-    sample_hashtags = ' '.join(FOOTBALL_HASHTAGS[:15])
+    sample_hashtags = ' '.join(FINANCE_HASHTAGS[:15])
 
-    prompt = f"""You are a top-tier USA Military and Army social media SEO specialist. Generate platform-specific upload metadata for a viral military video.
+    prompt = f"""You are a top-tier Finance and Stock Market social media SEO specialist. Generate platform-specific upload metadata for a viral finance video.
 
 === FULL VIDEO CONTEXT ===
 Original Title/Text: {title_clean}
 Source Profile: {context.get('source', 'Unknown')}
-Determined Category: {context.get('category', 'Tribute')}
+Determined Category: {context.get('category', 'Market News')}
 Headline Used in Video: {headline_clean}
 Story Used in Video: {story_clean}
 
-=== TRENDING MILITARY REFERENCE DATA ===
+=== TRENDING FINANCE REFERENCE DATA ===
 Keyword pool (use naturally): {sample_keywords}
 Trending hashtag pool: {sample_hashtags}
 
@@ -272,38 +272,37 @@ Generate SEO metadata tailored for YouTube AND Facebook. Each platform has diffe
 
 **1. "title" (YouTube SEO Title)**
 • STRICTLY under 60 characters.
-• Include the most relevant branch/equipment name.
-• Use a power word (UNBELIEVABLE, POWER, ELITE, PRIDE, HEROIC, EPIC).
-• Example: "US Navy SEALs Training 🇺🇸 Elite Precision"
+• Include the most relevant stock/company/market name.
+• Use a power word (BREAKING, MASSIVE, ELITE, EPIC, SURGING, CRASH).
+• Example: "NVIDIA Surges 10% After Earnings Beat 📈"
 
 **2. "description" (YouTube Description)**
 • 2-3 sentences. First sentence must hook the viewer.
-• Naturally include 3-5 military keywords (branches, equipment, topic).
-• End with a call to action (Like, Subscribe, Comment with support).
+• Naturally include 3-5 finance keywords (sectors, companies, topics).
+• End with a call to action (Like, Subscribe, Comment).
 • Include relevant hashtags at the end.
 • DO NOT append or request any Source URLs. Keep it clean.
 
 **3. "facebook_caption" (Facebook Reels Caption)**
 • Short, punchy, MAX 2 sentences. Do NOT include hashtags here.
-• Must include a clear call-to-action (e.g., "Drop a 🇺🇸 if you support our troops!", "Who did this better?", "Watch till the end!").
+• Must include a clear call-to-action (e.g., "Drop a 📈 if you're bullish!", "Who saw this coming?").
 • Conversational tone, like texting a friend.
 
 **4. "hashtags" (Facebook Hashtags – string)**
 • A single string of 7-8 highly relevant hashtags.
-• MUST include at least 2 military-specific hashtags from the context.
-• Mix broad (#Military, #USA) with specific (#NavySEALs, #USArmy).
-• Never use non-military hashtags.
+• MUST include at least 2 finance-specific hashtags from the context.
+• Mix broad (#Finance, #StockMarket) with specific (#Bitcoin, #NVIDIA).
+• Never use non-finance hashtags.
 
 **5. "tags" (YouTube Tags – list of strings)**
 • A list of 8-10 SEO tags for YouTube.
-• Include: branch names (2-3), equipment names (1-2), topic names (1-2), generic military terms (2-3).
-• Tags should be what fans would actually search on YouTube.
+• Include: sector names (2-3), company names (1-2), topic names (1-2), generic finance terms (2-3).
+• Tags should be what investors would actually search on YouTube.
 
 === RULES ===
-• Everything must be strictly USA military/army/navy/airforce. No unrelated politics, no general news.
+• Everything must be strictly finance, stock market, crypto, economy related. No politics, no military, no unrelated topics.
 • Write only in English.
-• Match the emotional tone of the video (epic show → excited, tribute → proud/respectful, training → amazed).
-• If you can identify the specific branches/equipment from the title, USE their exact names.
+• Match the emotional tone of the video (breaking news → urgent, market surge → excited, analysis → informative).
 • Do NOT output any source URLs or Twitter usernames/handles.
 
 Return ONLY a valid JSON object with these exact keys:
@@ -354,58 +353,58 @@ def _get_fallback_metadata(context=None):
     if not context:
         context = {}
     
-    raw_title = context.get('title', 'Incredible USA Military Power! 🇺🇸🦅')
+    raw_title = context.get('title', 'Breaking Financial News! 📈💰')
     original_title = clean_input_title(raw_title)
     if not original_title:
-        original_title = "Incredible USA Military Power! 🇺🇸🦅"
+        original_title = "Breaking Financial News! 📈💰"
         
-    category = context.get('category', 'Tribute')
+    category = context.get('category', 'Market News')
 
     # Smart truncation for YouTube title
     yt_title = original_title[:57] + "..." if len(original_title) > 57 else original_title
 
     # Build description with trending keywords
-    kw = FOOTBALL_KEYWORDS
-    branch_hint = ""
-    for b in kw["branches"]:
-        if b.lower() in original_title.lower():
-            branch_hint = f" featuring the {b}"
+    kw = FINANCE_KEYWORDS
+    sector_hint = ""
+    for s in kw["sectors"]:
+        if s.lower() in original_title.lower():
+            sector_hint = f" covering {s}"
             break
 
     description = (
         f"{original_title}\n\n"
-        f"An incredible demonstration of strength, coordination, and elite technology from our armed forces.{branch_hint}.\n"
-        f"👉 LIKE this video, SUBSCRIBE for daily military videos, and COMMENT to show your support! 🇺🇸🦅"
+        f"An important update from the world of finance{sector_hint}.\n"
+        f"👉 LIKE this video, SUBSCRIBE for daily market updates, and COMMENT your thoughts! 📈💰"
     )
 
     # Pick the most relevant hashtags from the trending list
     context_lower = original_title.lower()
     specific_hashtags = []
-    for ht in FOOTBALL_HASHTAGS:
+    for ht in FINANCE_HASHTAGS:
         name = ht[1:].lower()  # strip #
-        if name in context_lower or any(name in b.lower() for b in kw["branches"]) or any(name in e.lower() for e in kw["equipment"]):
+        if name in context_lower or any(name in s.lower() for s in kw["sectors"]) or any(name in c.lower() for c in kw["companies"]):
             specific_hashtags.append(ht)
     # Always include broad ones
-    base_hashtags = ["#Military", "#USA", "#Soldiers", "#MilitaryPower"]
+    base_hashtags = ["#Finance", "#StockMarket", "#WallStreet", "#Investing"]
     all_hashtags = list(dict.fromkeys(specific_hashtags + base_hashtags))[:8]
     hashtag_string = " ".join(all_hashtags)
 
     # Build tags
     tags = []
-    # Add matched branches
-    for b in kw["branches"]:
-        if b.lower() in context_lower:
-            tags.append(b)
-    # Add matched equipment
-    for e in kw["equipment"]:
-        if e.lower() in context_lower:
-            tags.append(e)
+    # Add matched sectors
+    for s in kw["sectors"]:
+        if s.lower() in context_lower:
+            tags.append(s)
+    # Add matched companies
+    for c in kw["companies"]:
+        if c.lower() in context_lower:
+            tags.append(c)
     # Add matched topics
     for t in kw["topics"]:
         if t.lower() in context_lower:
             tags.append(t)
-    # Fill with generic military tags
-    generic = ["Military", "Army", "Navy", "AirForce", "Marines", "Special Forces", "American Soldiers"]
+    # Fill with generic finance tags
+    generic = ["Finance", "Stock Market", "Trading", "Investing", "Economy", "Wall Street", "Market News"]
     for g in generic:
         if len(tags) < 10 and g not in tags:
             tags.append(g)
@@ -416,8 +415,8 @@ def _get_fallback_metadata(context=None):
         "description": description,
         "facebook_caption": (
             f"{original_title}\n\n"
-            f"{'🇺🇸 Show your support for our brave soldiers!' if 'tribute' in category.lower() else '🔥 An amazing showcase of military power!'}"
-            f" Drop a comment and tag a friend who needs to see this! 👇"
+            f"{'📈 Breaking market news! What do you think?' if 'breaking' in category.lower() else '💰 Important financial update!'}"
+            f" Drop a comment and share your take! 👇"
         ),
         "hashtags": hashtag_string,
         "tags": tags,
@@ -429,9 +428,9 @@ def _get_fallback_metadata(context=None):
 # ──────────────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     dummy_context = {
-        "title": "Messi Scores Stunning Free Kick against France .@StopThatMessi https://t.co/xyz",
-        "source": "FIFA World Cup",
-        "source_url": "https://x.com/FIFAWorldCup/status/1234567890"
+        "title": "NVIDIA Surges 15% After Blowout Earnings Report .@NVIDIA https://t.co/xyz",
+        "source": "Bloomberg",
+        "source_url": "https://x.com/Bloomberg/status/1234567890"
     }
     analysis = analyze_video_for_editing(dummy_context)
     print("Editing Analysis:")

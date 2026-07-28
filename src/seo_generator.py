@@ -8,26 +8,26 @@ except ImportError:
     from logger import logger
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Trending Football/Soccer Keywords and Hashtags
+# Trending Finance Keywords and Hashtags
 # ──────────────────────────────────────────────────────────────────────────────
-FOOTBALL_KEYWORDS = {
-    "branches": [
-        "US Army", "US Navy", "US Marine Corps", "USMC", "US Air Force", "US Coast Guard",
-        "Space Force", "National Guard", "Special Forces", "Navy SEALs", "Green Berets", "Army Rangers",
+FINANCE_KEYWORDS = {
+    "sectors": [
+        "Stock Market", "Wall Street", "S&P 500", "Nasdaq", "Dow Jones",
+        "Crypto", "Bitcoin", "Ethereum", "Forex", "Commodities", "Gold", "Oil",
     ],
-    "equipment": [
-        "F-35 Lightning", "M1 Abrams Tank", "A-10 Warthog", "Aircraft Carrier", "F-22 Raptor",
-        "Apache Helicopter", "Black Hawk", "Destroyer", "Submarine", "Humvee", "CH-47 Chinook",
+    "companies": [
+        "Apple", "Tesla", "NVIDIA", "Amazon", "Microsoft", "Google", "Meta",
+        "Goldman Sachs", "JPMorgan", "Berkshire Hathaway", "BlackRock", "Visa",
     ],
     "competitions": [
-        "USA Military", "Department of Defense", "Pentagon", "Armed Forces", "Patriotism",
+        "Economy", "Finance", "Investing", "Trading", "Market News",
     ],
 }
 
-FOOTBALL_HASHTAGS = [
-    "#USArmy", "#USNavy", "#USMC", "#USAirForce", "#Military", "#Army",
-    "#Marines", "#NavySEALs", "#SpecialForces", "#Tactical", "#Aviation",
-    "#FighterJet", "#Navy", "#AirForce", "#Veterans", "#MilitaryLife",
+FINANCE_HASHTAGS = [
+    "#StockMarket", "#WallStreet", "#Investing", "#Trading", "#Finance",
+    "#Crypto", "#Bitcoin", "#Nasdaq", "#SP500", "#DowJones",
+    "#Economy", "#Stocks", "#Business", "#Money", "#Wealth",
 ]
 
 def clean_filename(filename):
@@ -66,20 +66,20 @@ def generate_seo_metadata(filename, media_type='reel'):
     
     content_type_str = "Facebook Reel" if media_type == 'reel' else "Facebook Photo Post"
     video_str = "short vertical video (Facebook Reel)" if media_type == 'reel' else "stunning photo/image"
-    hashtag_str = "#Reels #USArmy #Military" if media_type == 'reel' else "#USArmy #USNavy"
+    hashtag_str = "#Reels #StockMarket #Finance" if media_type == 'reel' else "#Finance #Investing"
     
     system_prompt = (
-        f"You are an expert Social Media Manager and SEO specialist for {content_type_str}s targeting USA military and army enthusiasts. "
+        f"You are an expert Social Media Manager and SEO specialist for {content_type_str}s targeting finance and stock market enthusiasts. "
         "Your goal is to maximize engagement, click-through rate, search visibility, and organic reach."
     )
     
     user_prompt = f"""
-    Generate viral, SEO-optimized military metadata for a {video_str} about: "{topic}".
+    Generate viral, SEO-optimized finance metadata for a {video_str} about: "{topic}".
     
     Requirements:
-    1. Title: Short, catchy, uses power words (e.g. UNBELIEVABLE, POWER, ELITE, PRIDE), includes relevant emojis. Max 60 characters.
+    1. Title: Short, catchy, uses power words (e.g. BREAKING, SURGING, MASSIVE, EPIC), includes relevant emojis. Max 60 characters.
     2. Description: 1-2 short, engaging sentences that create curiosity. Do NOT include any Twitter/X usernames, source URLs, or links.
-    3. Hashtags: 5-8 highly relevant and trending military hashtags (include {hashtag_str}).
+    3. Hashtags: 5-8 highly relevant and trending finance hashtags (include {hashtag_str}).
     
     Format the output exactly as JSON:
     {{
@@ -115,8 +115,8 @@ def generate_seo_metadata(filename, media_type='reel'):
         
         return {
             'title': data.get('title', topic.title()),
-            'description': data.get('description', f"Incredible military moment featuring {topic}! Watch till the end! 🇺🇸🦅"),
-            'hashtags': data.get('hashtags', "#USArmy #USNavy #Military #Reels")
+            'description': data.get('description', f"Breaking financial news featuring {topic}! Watch till the end! 📈"),
+            'hashtags': data.get('hashtags', "#StockMarket #Finance #WallStreet #Reels")
         }
         
     except Exception as e:
@@ -131,20 +131,20 @@ def generate_fallback_metadata(filename):
         return lst[h % len(lst)]
         
     topic = clean_filename(filename)
-    topic_title = topic.title() if topic else "Unmissable Military Moment"
+    topic_title = topic.title() if topic else "Breaking Market News"
     
-    # Pre-saved Military SEO Patterns (Titles & Descriptions)
+    # Pre-saved Finance SEO Patterns (Titles & Descriptions)
     titles = [
-        "Incredible {topic} action! 🇺🇸🦅",
-        "The raw power of {topic} is unreal! 🙌",
-        "POV: Witnessing {topic} strength. 🤯",
-        "Is this the best of {topic} ever? 👀",
-        "This {topic} clip will give you goosebumps! 🚨"
+        "Breaking: {topic} moves markets! 📈",
+        "The {topic} story everyone is watching! 💰",
+        "POV: {topic} is making waves! 🤯",
+        "Is this the next big {topic} trend? 👀",
+        "This {topic} update will surprise you! 🚨"
     ]
     descriptions = [
-        "Witness one of the most incredible military moments featuring {topic}. Our armed forces never fail to amaze! 🇺🇸🦅",
-        "Up close and personal with {topic}! An extraordinary glimpse into elite military operations. Share this with a friend! 📲🎖️",
-        "Just when you think you've seen it all, this happens. Absolute military power! What are your thoughts on this? 👇"
+        "Breaking financial news on {topic}. Don't miss this market-moving story! 📈",
+        "Up close with {topic}! An important update from the world of finance. Share this with a friend! 📲💰",
+        "Just when you thought the market was calm, {topic} happens. What are your thoughts? 👇"
     ]
     
     # Get deterministic choices based on filename to keep output consistent per video
@@ -159,23 +159,23 @@ def generate_fallback_metadata(filename):
     description = desc_template.format(topic=topic_title)
     
     # Build Hashtags list
-    hash_tags_set = {'#military', '#usarmy', '#usnavy', '#reels'}
+    hash_tags_set = {'#finance', '#stockmarket', '#wallstreet', '#reels'}
     
     # Add matches from trending keywords to specific hashtags
-    kw = FOOTBALL_KEYWORDS
+    kw = FINANCE_KEYWORDS
     context_lower = topic.lower()
-    for b in kw["branches"]:
-        if b.lower() in context_lower:
-            hash_tags_set.add(f"#{b.replace(' ', '').lower()}")
-    for e in kw["equipment"]:
-        if e.lower() in context_lower:
-            hash_tags_set.add(f"#{e.replace(' ', '').lower()}")
-    for c in kw["competitions"]:
+    for s in kw["sectors"]:
+        if s.lower() in context_lower:
+            hash_tags_set.add(f"#{s.replace(' ', '').lower()}")
+    for c in kw["companies"]:
         if c.lower() in context_lower:
             hash_tags_set.add(f"#{c.replace(' ', '').lower()}")
+    for comp in kw["competitions"]:
+        if comp.lower() in context_lower:
+            hash_tags_set.add(f"#{comp.replace(' ', '').lower()}")
             
     # Convert set back to list, ensure we don't have duplicates, and limit to ~8 tags
-    ordered_tags = ['#military', '#usarmy', '#usnavy', '#reels']
+    ordered_tags = ['#finance', '#stockmarket', '#wallstreet', '#reels']
     for tag in sorted(hash_tags_set):
         if tag not in ordered_tags:
             ordered_tags.append(tag)

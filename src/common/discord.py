@@ -55,7 +55,7 @@ def get_run_details() -> str:
 
 def report_download_start():
     embed = {
-        "title": "🟢 USA Military Download Started",
+        "title": "🟢 Finance Pipeline Download Started",
         "description": get_run_details(),
         "color": 3066993 # Greenish
     }
@@ -63,7 +63,7 @@ def report_download_start():
 
 def report_download_complete(source_url: str):
     embed = {
-        "title": "✅ USA Military Download Completed",
+        "title": "✅ Finance Pipeline Download Completed",
         "description": f"**Source:** {source_url}\n{get_run_details()}",
         "color": 3066993
     }

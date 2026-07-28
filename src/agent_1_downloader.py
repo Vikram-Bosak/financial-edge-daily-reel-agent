@@ -38,16 +38,14 @@ def search_and_download_latest_video():
         profiles = [p.strip() for p in env_profiles.split(",") if p.strip()]
     else:
         profiles = [
-            "https://x.com/Business",
-            "https://x.com/FT",
-            "https://x.com/markets",
-            "https://x.com/wsj",
-            "https://x.com/YahooFinance",
-            "https://x.com/cnbc",
-            "https://x.com/Forbes",
+            "https://x.com/Bloomberg",
             "https://x.com/Reuters",
-            "https://x.com/GoldmanSachs",
-            "https://x.com/MorganStanley"
+            "https://x.com/CNBC",
+            "https://x.com/YahooFinance",
+            "https://x.com/WSJ",
+            "https://x.com/BusinessInsider",
+            "https://x.com/Forbes",
+            "https://x.com/MarketWatch"
         ]
         
     # Clean profiles to just usernames if they are full URLs

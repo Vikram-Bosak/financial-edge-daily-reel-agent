@@ -7,7 +7,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from editor.advanced_editor import process_video_dynamically
 
 def process_video(video_data):
-    print("Starting Agent 2: Video Editor (FIFA Style)")
+    print("Starting Agent 2: Video Editor (Finance News)")
     
     raw_video_path = video_data.get('local_path', "workspace/raw_video.mp4")
     title = video_data.get('title', 'Unknown Video')

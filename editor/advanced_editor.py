@@ -119,7 +119,7 @@ def process_video_dynamically(input_path: str, logo_path: str, output_path: str,
     
     message_text = (
         f"🎬 **EDITING REPORT**\n\n"
-        f"**Workflow Name:** FIFA Auto Pipeline\n"
+        f"**Workflow Name:** Finance News Pipeline\n"
         f"**Edit Start Time:** {edit_start_time.strftime('%Y-%m-%d %H:%M UTC')}\n"
         f"**Edit Complete Time:** {edit_complete_time.strftime('%Y-%m-%d %H:%M UTC')}\n"
         f"**File Name:** {file_name}\n"
