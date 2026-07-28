@@ -31,25 +31,24 @@ def search_and_download_latest_video():
         "errors": []
     }
     
-    # Updated profiles (16 total active profiles)
-    profiles = [
-        "https://x.com/USArmy",
-        "https://x.com/USNavy",
-        "https://x.com/USMC",
-        "https://x.com/USAirForce",
-        "https://x.com/DeptofDefense",
-        "https://x.com/NationalGuard",
-        "https://x.com/USArmyReserve",
-        "https://x.com/US_SpaceForce",
-        "https://x.com/USCoastGuard",
-        "https://x.com/Centcom",
-        "https://x.com/USPacificFleet",
-        "https://x.com/PacificMarines",
-        "https://x.com/AirForceReserve",
-        "https://x.com/USArmyTRADOC",
-        "https://x.com/USArmyFORSCOM",
-        "https://x.com/USArmySMDC"
-    ]
+    # Use environment variables if defined, otherwise fall back to finance profiles
+    env_profiles = os.environ.get("X_PROFILES") or os.environ.get("TWITTER_PROFILES")
+    if env_profiles:
+        # Expecting comma-separated values
+        profiles = [p.strip() for p in env_profiles.split(",") if p.strip()]
+    else:
+        profiles = [
+            "https://x.com/Business",
+            "https://x.com/FT",
+            "https://x.com/markets",
+            "https://x.com/wsj",
+            "https://x.com/YahooFinance",
+            "https://x.com/cnbc",
+            "https://x.com/Forbes",
+            "https://x.com/Reuters",
+            "https://x.com/GoldmanSachs",
+            "https://x.com/MorganStanley"
+        ]
         
     # Clean profiles to just usernames if they are full URLs
     usernames = []
