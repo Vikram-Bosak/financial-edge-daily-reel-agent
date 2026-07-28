@@ -74,8 +74,9 @@ def search_and_download_latest_video():
     
     nitter_instances = [
         "https://nitter.net",
-        "https://nitter.privacydev.net",
-        "https://nitter.poast.org"
+        "https://nitter.privacyredirect.com",
+        "https://lightbrd.com",
+        "https://nitter.space",
     ]
     
     valid_videos = []
@@ -95,7 +96,7 @@ def search_and_download_latest_video():
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
                 }
                 req = urllib.request.Request(url, headers=headers)
-                with urllib.request.urlopen(req, timeout=15) as response:
+                with urllib.request.urlopen(req, timeout=20) as response:
                     xml_data = response.read()
                     root = ET.fromstring(xml_data)
                     items = root.findall('.//item')
@@ -105,8 +106,8 @@ def search_and_download_latest_video():
                 print(f"Failed to fetch {url}: {e}")
                 
         if not rss_fetched:
-            print(f"Could not fetch RSS for {username} on any Nitter instance.")
-            stats["errors"].append(f"RSS Fetch Error for {username}")
+            print(f"Could not fetch RSS for {username} on any Nitter instance. Tried: {', '.join(nitter_instances)}")
+            stats["errors"].append(f"RSS Fetch Error for {username} (all instances failed)")
             continue
             
         for item in items:
@@ -118,8 +119,8 @@ def search_and_download_latest_video():
             if not link or not pubDate_str:
                 continue
                 
-            # 1. Check if it's a video
-            if ">Video<" not in desc and "Video" not in desc:
+            # 1. Check if it's a video (matches "Video", ">Video<", ">Video<br>" etc.)
+            if "Video" not in desc and "video" not in desc.lower():
                 continue
                 
             # 2. Extract tweet ID and check history
