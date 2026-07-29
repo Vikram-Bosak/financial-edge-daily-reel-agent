@@ -5,18 +5,17 @@ on:
     branches:
       - main
   schedule:
-    # Run every 2 hours automatically
     - cron: '0 */2 * * *'
   workflow_dispatch:
 
 jobs:
   run-pipeline:
-    name: End-to-End USA Military Pipeline
+    name: End-to-End Finance Pipeline
     runs-on: ubuntu-latest
     permissions:
       contents: write
     concurrency:
-      group: military-pipeline
+      group: finance-pipeline
       cancel-in-progress: false
 
     steps:
@@ -45,7 +44,7 @@ jobs:
           NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL_MILITARY }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
           YOUTUBE_TOKEN_JSON: ${{ secrets.YOUTUBE_TOKEN_JSON }}
@@ -61,7 +60,7 @@ jobs:
       - name: 📢 Step 2 - Run Unified Reporter (agent_4_reporter.py)
         if: always()
         env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL_MILITARY }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
           python src/agent_4_reporter.py
 
